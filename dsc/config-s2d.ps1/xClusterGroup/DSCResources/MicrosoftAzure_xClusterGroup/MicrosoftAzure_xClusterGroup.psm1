@@ -33,9 +33,7 @@ function Set-TargetResource
  
     # Add Server role to Cluster
     
-    $Disks = Get-ClusterResource -ErrorAction SilentlyContinue | Where-Object Name -like "*${Name}_*"
-
-    Add-ClusterServerRole -Storage $Disks.Name -Name $Name -StaticAddress $LBIPAddress -ErrorAction Stop -Verbose
+    Add-ClusterServerRole -Name $Name -StaticAddress $LBIPAddress -ErrorAction Stop -Verbose
 
     # Make sure Server role is active on this node
 
