@@ -155,7 +155,7 @@
   "outputs": {
     "clusterRoleName": {
       "type": "string",
-      "value": "[reference(variables('deployS2DCluster')).outputs.clusterName.value]"
+      "value": "[reference(variables('deployS2DCluster')).outputs.clusterRoleName.value]"
     },
     "lbIPAddress": {
       "type": "string",
