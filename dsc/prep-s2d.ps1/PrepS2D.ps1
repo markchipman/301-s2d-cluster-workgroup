@@ -10,12 +10,6 @@ configuration PrepS2D
         [String]$DomainName,
 
         [Parameter(Mandatory)]
-        [String]$EnableAutomaticPatching,
-
-        [Parameter(Mandatory)]
-        [Int]$AutomaticPatchingHour,
-
-        [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$AdminCreds,
 
         [Int]$RetryCount=20,
