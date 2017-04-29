@@ -17,6 +17,17 @@
       },
       "defaultValue": "Standard_DS4_v2"
     },
+    "imageSKU": {
+        "type": "string",
+        "allowedValues": [
+          "2016-Datacenter",
+          "2016-Datacenter-Server-Core"
+        ],
+        "metadata": {
+          "description": "VM operating system image to use for provisioning cluster node VMs"
+        },
+        "defaultValue": "2016-Datacenter"
+    },
     "enableAcceleratedNetworking": {
       "type": "bool",
       "metadata": {
@@ -129,6 +140,9 @@
           },
           "vmSize": {
             "value": "[parameters('vmSize')]"
+          },
+          "imageSku": {
+            "value": "[parameters('imageSKU')]"
           },
           "enableAcceleratedNetworking": {
             "value": "[parameters('enableAcceleratedNetworking')]"

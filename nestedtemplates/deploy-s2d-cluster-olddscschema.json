@@ -102,12 +102,10 @@
         "vmAvailabilitySetName": "[toLower(concat(variables('vmNamePrefix'),'as'))]",
         "clusterName": "[toLower(concat(variables('vmNamePrefix'),'c'))]",
         "vmLoopTemplateURL": "[concat(parameters('_artifactsLocation'),'/nestedtemplates/newVM.json',parameters('_artifactsLocationSasToken'))]",
-        "s2dPrepModulesURL": "[concat(parameters('_artifactsLocation'),'/dsc/prep-s2d.ps1.zip')]",
-        "s2dPrepScript": "PrepS2D.ps1",
-        "s2dPrepFunction": "PrepS2D",
-        "s2dConfigModulesURL": "[concat(parameters('_artifactsLocation'),'/dsc/config-s2d.ps1.zip')]",
-        "s2dConfigScript": "ConfigS2D.ps1",
-        "s2dConfigFunction": "ConfigS2D",
+        "s2dPrepModulesURL": "[concat(parameters('_artifactsLocation'),'/dsc/prep-s2d.ps1.zip',parameters('_artifactsLocationSasToken'))]",
+        "s2dPrepFunction": "PrepS2D.ps1\\PrepS2D",
+        "s2dConfigModulesURL": "[concat(parameters('_artifactsLocation'),'/dsc/config-s2d.ps1.zip',parameters('_artifactsLocationSasToken'))]",
+        "s2dConfigFunction": "ConfigS2D.ps1\\ConfigS2D",
         "lbName": "[toLower(concat(variables('vmNamePrefix'),'lb'))]",
         "lbId": "[resourceId('Microsoft.Network/loadBalancers',variables('lbName'))]",
         "lbFEName": "[concat(variables('lbName'),'fe')]",
@@ -321,25 +319,22 @@
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
-                "typeHandlerVersion": "2.24",
+                "typeHandlerVersion": "2.23",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "configuration": {
-                        "url": "[variables('s2dPrepModulesURL')]",
-                        "script": "[variables('s2dPrepScript')]",
-                        "function": "[variables('s2dPrepFunction')]"
-                    },
-                    "configurationArguments": {
-                        "domainName": "[parameters('domainName')]"
+                    "modulesUrl": "[variables('s2dPrepModulesURL')]",
+                    "configurationFunction": "[variables('s2dPrepFunction')]",
+                    "properties": {
+                        "domainName": "[parameters('domainName')]",
+                        "adminCreds": {
+                            "userName": "[parameters('adminUserName')]",
+                            "password": "PrivateSettingsRef:adminPassword"
+                        }
                     }
                 },
                 "protectedSettings": {
-                    "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]",
-                    "configurationArguments": {
-                        "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
-                            "password": "[parameters('adminPassword')]"
-                        }
+                    "items": {
+                        "adminPassword": "[parameters('adminPassword')]"
                     }
                 }
             }
@@ -357,35 +352,33 @@
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
-                "typeHandlerVersion": "2.24",
+                "typeHandlerVersion": "2.23",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "configuration": {
-                        "url": "[variables('s2dConfigModulesURL')]",
-                        "script": "[variables('s2dConfigScript')]",
-                        "function": "[variables('s2dConfigFunction')]"
-                    },
-                    "configurationArguments": {
+                    "modulesUrl": "[variables('s2dConfigModulesURL')]",
+                    "configurationFunction": "[variables('s2dConfigFunction')]",
+                    "properties": {
                         "domainName": "[parameters('domainName')]",
                         "clusterName": "[variables('clusterName')]",
                         "lbIPAddress": "[reference(variables('lbName')).frontendIPConfigurations[0].properties.privateIPAddress]",
                         "vmNamePrefix": "[variables('vmNamePrefix')]",
                         "vmCount": "[parameters('vmCount')]",
                         "vmDiskSize": "[parameters('vmDiskSize')]",
-                        "witnessStorageName": "[variables('witnessStorageName')]"
+                        "witnessStorageName": "[variables('witnessStorageName')]",
+                        "witnessStorageKey": {
+                            "userName": "PLACEHOLDER-DO-NOT-USE",
+                            "password": "PrivateSettingsRef:witnessStorageKey"
+                        },
+                        "adminCreds": {
+                            "userName": "[parameters('adminUserName')]",
+                            "password": "PrivateSettingsRef:adminPassword"
+                        }
                     }
                 },
                 "protectedSettings": {
-                    "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]",
-                    "configurationArguments": {
-                        "adminCreds": {
-                            "userName": "[parameters('adminUserName')]",
-                            "password": "[parameters('adminPassword')]"
-                        },
-                        "witnessStorageKey": {
-                            "userName": "PLACEHOLDER-DO-NOT-USE",
-                            "password": "[listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('witnessStorageName')),variables('apiVersionStorage')).keys[0].value]"
-                        }
+                    "items": {
+                        "adminPassword": "[parameters('adminPassword')]",
+                        "witnessStorageKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('witnessStorageName')),variables('apiVersionStorage')).keys[0].value]"
                     }
                 }
             }
