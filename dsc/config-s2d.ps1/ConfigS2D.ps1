@@ -98,7 +98,7 @@ configuration ConfigS2D
             Name = $ClusterName
             Nodes = $Nodes
             PsDscRunAsCredential = $AdminCreds
-	        DependsOn = @("[WindowsFeature]FCPS","[Script]FirewallProfile")
+            DependsOn = @("[WindowsFeature]FCPS","[Script]FirewallProfile")
         }
 
         Script CloudWitness
