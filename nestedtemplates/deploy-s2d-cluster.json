@@ -140,80 +140,80 @@
             "kind": "Storage"
         },
         {
-			"apiVersion": "2016-09-01",
-			"name": "[variables('lbName')]",
-			"type": "Microsoft.Network/loadBalancers",
-			"location": "[resourceGroup().location]",
-			"dependsOn": [],
-			"properties": {
-				"frontendIPConfigurations": [
-					{
-						"name": "[variables('lbFEName')]",
-						"properties": {
-							"privateIPAllocationMethod": "Dynamic",
-							"subnet": {
-								"id": "[parameters('nicSubnetUri')]"
-							}
-						}
-					}
-				],
-				"backendAddressPools": [
-					{
-						"name": "[variables('lbBEPoolName')]"
-					}
-				],
-				"loadBalancingRules": [
-					{
-						"name": "lb-sample-rule-01",
-						"properties": {
-							"frontendIPConfiguration": {
-								"id": "[variables('lbFEConfigId')]"
-							},
-							"backendAddressPool": {
-								"id": "[variables('lbBEPoolId')]"
-							},
-							"probe": {
-								"id": "[variables('lbProbeId')]"
-							},
-							"protocol": "Tcp",
-							"frontendPort": 80,
-							"backendPort": 80,
-							"enableFloatingIP": true
-						}
-					},
+            "apiVersion": "2016-09-01",
+            "name": "[variables('lbName')]",
+            "type": "Microsoft.Network/loadBalancers",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "frontendIPConfigurations": [
                     {
-						"name": "lb-sample-rule-02",
-						"properties": {
-							"frontendIPConfiguration": {
-								"id": "[variables('lbFEConfigId')]"
-							},
-							"backendAddressPool": {
-								"id": "[variables('lbBEPoolId')]"
-							},
-							"probe": {
-								"id": "[variables('lbProbeId')]"
-							},
-							"protocol": "Tcp",
-							"frontendPort": 443,
-							"backendPort": 443,
+                        "name": "[variables('lbFEName')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[parameters('nicSubnetUri')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "[variables('lbBEPoolName')]"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "lb-sample-rule-01",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[variables('lbFEConfigId')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[variables('lbBEPoolId')]"
+                            },
+                            "probe": {
+                                "id": "[variables('lbProbeId')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": 80,
+                            "backendPort": 80,
+                            "enableFloatingIP": true
+                        }
+                    },
+                    {
+                        "name": "lb-sample-rule-02",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[variables('lbFEConfigId')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[variables('lbBEPoolId')]"
+                            },
+                            "probe": {
+                                "id": "[variables('lbProbeId')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": 443,
+                            "backendPort": 443,
                             "idleTimeoutInMinutes": 30,
-							"enableFloatingIP": true
-						}
-					}
-				],
-				"probes": [
-					{
-						"name": "[variables('lbProbeName')]",
-						"properties": {
-							"protocol": "Tcp",
-							"port": 59001,
-							"intervalInSeconds": 5,
-							"numberOfProbes": 2
-						}
-					}
-				]
-			}
-		},
+                            "enableFloatingIP": true
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "[variables('lbProbeName')]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 59001,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ]
+            }
+        },
         {
             "name": "[concat(variables('vmNamePrefix'), copyindex(), '-nic')]",
             "type": "Microsoft.Network/networkInterfaces",
@@ -235,11 +235,11 @@
                             "subnet": {
                                 "id": "[parameters('nicSubnetUri')]"
                             },
-							"loadBalancerBackendAddressPools": [
-								{
-									"id": "[variables('lbBEPoolId')]"
-								}
-							]
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[variables('lbBEPoolId')]"
+                                }
+                            ]
                         }
                     }
                 ],
